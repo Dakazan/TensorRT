@@ -165,6 +165,7 @@ if not PY_ONLY:
         if BAZEL_EXE is None:
             sys.exit("Could not find bazel in PATH")
 
+print(f"(PY_ONLY: {PY_ONLY}, NO_TS: {NO_TS}) --> {(PY_ONLY or NO_TS)}")
 
 def build_libtorchtrt_cxx11_abi(
     develop=True,
@@ -278,6 +279,7 @@ class DevelopCommand(develop):
 
     def run(self):
         if not PY_ONLY:
+            print("Building libtorchtrt_cxx11_abi in develop mode")
             build_libtorchtrt_cxx11_abi(develop=True, rt_only=NO_TS)
             copy_libtorchtrt(rt_only=NO_TS)
 
@@ -298,6 +300,7 @@ class InstallCommand(install):
 
     def run(self):
         if not PY_ONLY:
+            print("Building libtorchtrt_cxx11_abi in install mode")
             build_libtorchtrt_cxx11_abi(develop=False, rt_only=NO_TS)
             copy_libtorchtrt(rt_only=NO_TS)
 
@@ -318,6 +321,7 @@ class BdistCommand(bdist_wheel):
 
     def run(self):
         if not PY_ONLY:
+            print("Building libtorchtrt_cxx11_abi in bdist mode")
             build_libtorchtrt_cxx11_abi(develop=False, rt_only=NO_TS)
             copy_libtorchtrt(rt_only=NO_TS)
 
@@ -341,6 +345,7 @@ class EditableWheelCommand(editable_wheel):
             gen_version_file()
             editable_wheel.run(self)
         else:
+            print("Building libtorchtrt_cxx11_abi in edit mode")
             build_libtorchtrt_cxx11_abi(develop=True, rt_only=NO_TS)
             gen_version_file()
             copy_libtorchtrt(rt_only=NO_TS)
