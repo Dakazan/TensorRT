@@ -1,4 +1,5 @@
 import importlib
+import importlib
 import os
 import sys
 from collections import namedtuple
@@ -25,16 +26,10 @@ FeatureSet = namedtuple(
 )
 
 trtorch_dir = os.path.dirname(__file__)
-linked_file = os.path.join(
-    "lib", "torchtrt.dll" if sys.platform.startswith("win") else "libtorchtrt.so"
-)
+linked_file = os.path.join("lib", "torchtrt.dll" if sys.platform.startswith("win") else "libtorchtrt.so")
 linked_file_runtime = os.path.join(
-    "lib",
-    (
-        "torchtrt_runtime.dll"
-        if sys.platform.startswith("win")
-        else "libtorchtrt_runtime.so"
-    ),
+  "lib",
+  ("torchtrt_runtime.dll" if sys.platform.startswith("win") else "libtorchtrt_runtime.so"),
 )
 linked_file_full_path = os.path.join(trtorch_dir, linked_file)
 linked_file_runtime_full_path = os.path.join(trtorch_dir, linked_file_runtime)
@@ -71,17 +66,17 @@ def _enabled_features_str() -> str:
 
 
 def needs_torch_tensorrt_runtime(f: Callable[..., Any]) -> Callable[..., Any]:
-    def wrapper(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
-        if ENABLED_FEATURES.torch_tensorrt_runtime:
-            return f(*args, **kwargs)
-        else:
+  def wrapper(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
+    if ENABLED_FEATURES.torch_tensorrt_runtime:
+      return f(*args, **kwargs)
+    else:
 
-            def not_implemented(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
-                raise NotImplementedError("Torch-TensorRT Runtime is not available")
+      def not_implemented(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
+        raise NotImplementedError("Torch-TensorRT Runtime is not available")
 
-            return not_implemented(*args, **kwargs)
+      return not_implemented(*args, **kwargs)
 
-    return wrapper
+  return wrapper
 
 
 def needs_qdp_plugin(f: Callable[..., Any]) -> Callable[..., Any]:
@@ -101,19 +96,17 @@ def needs_qdp_plugin(f: Callable[..., Any]) -> Callable[..., Any]:
 
 
 def needs_refit(f: Callable[..., Any]) -> Callable[..., Any]:
-    def wrapper(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
-        if ENABLED_FEATURES.refit:
-            return f(*args, **kwargs)
-        else:
+  def wrapper(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
+    if ENABLED_FEATURES.refit:
+      return f(*args, **kwargs)
+    else:
 
-            def not_implemented(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
-                raise NotImplementedError(
-                    "Refit feature is currently not available in Python 3.13 or higher"
-                )
+      def not_implemented(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
+        raise NotImplementedError("Refit feature is currently not available in Python 3.13 or higher")
 
-            return not_implemented(*args, **kwargs)
+      return not_implemented(*args, **kwargs)
 
-    return wrapper
+  return wrapper
 
 
 def needs_cross_compile(f: Callable[..., Any]) -> Callable[..., Any]:
@@ -139,10 +132,10 @@ def for_all_methods(
     if exclude:
         exclude_list = exclude
 
-    def decorate(cls: Type[T]) -> Type[T]:
-        for attr in cls.__dict__:
-            if callable(getattr(cls, attr)) and attr not in exclude_list:
-                setattr(cls, attr, decorator(getattr(cls, attr)))
-        return cls
+  def decorate(cls: Type[T]) -> Type[T]:
+    for attr in cls.__dict__:
+      if callable(getattr(cls, attr)) and attr not in exclude_list:
+        setattr(cls, attr, decorator(getattr(cls, attr)))
+    return cls
 
-    return decorate
+  return decorate
