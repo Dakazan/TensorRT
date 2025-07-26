@@ -63,6 +63,7 @@ cc_library(
             [
                 "include/x86_64-linux-gnu/NvInfer*.h",
             ],
+            allow_empty = True,
             exclude = [
                 "include/x86_64-linux-gnu/NvInferPlugin.h",
                 "include/x86_64-linux-gnu/NvInferPluginUtils.h",
@@ -240,7 +241,7 @@ cc_library(
 cc_import(
     name = "nvonnxparser_runtime_lib",
     shared_library = select({
-        ":aarch64_linux": "lib/x86_64-linux-gnu/libnvonnxparser_runtime.so",
+        ":aarch64_linux": "lib/aarch64-linux-gnu/libnvonnxparser_runtime.so",
         ":ci_rhel_x86_64_linux": "lib64/libnvonnxparser_runtime.so",
         ":windows": "lib/nvonnxparser_runtime.dll",
         "//conditions:default": "lib/x86_64-linux-gnu/libnvonnxparser_runtime.so",
